@@ -30,6 +30,7 @@ app.post("/createTable", async (req, res) => {
         res.json({ status: result })
     } catch (error) {
         console.error(error.message)
+        res.status(500).json({ error: 'Server Error' })
     }
 })
 
@@ -46,6 +47,7 @@ app.post("/register", async (req, res) => {
 
     } catch (error) {
         console.error(error.message)
+        res.status(500).json({ error: 'Server Error' })
     }
 })
 
@@ -58,6 +60,7 @@ app.get("/getUsers", async (req, res) => {
 
     } catch (error) {
         console.error(error.message)
+        res.status(500).json({ error: 'Server Error' })
     }
 })
 
@@ -84,6 +87,28 @@ app.put("/updateUsers/:id", async (req, res) => {
 
     } catch (error) {
         console.error(error.message)
+        res.status(500).json({ error: 'Server Error' })
+    }
+})
+
+app.delete("/delete/:id", async (req, res) => {
+    try {
+        const userId = req.params.id
+        const query = `DELETE FROM users WHERE id = ?`
+        const value = [[userId]]
+
+        await promiseQuery(query, value)
+
+        const getQuery = `SELECT id, email , name , phone FROM users LIMIT 10 `
+        const result = await promiseQuery(getQuery)
+
+        res.json({ data: result })
+
+
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).json({ error: 'Server Error' })
+
     }
 })
 
@@ -94,6 +119,7 @@ app.put("/alterTable", async (req, res) => {
         res.send(result)
     } catch (error) {
         console.error(error.message)
+        res.status(500).json({ error: 'Server Error' })
     }
 })
 
